@@ -1,0 +1,37 @@
+﻿<script src="../Meta.js"></script>
+<script src="../Class.js"></script>
+<script src="../Namespace.js"></script>
+<script src="../ObjectEx.js"></script>
+<script src="../TObject.js"></script>
+
+<script>
+document.writeln('Qomo framework inited: ', TObject.Create === Object, '<BR>');
+
+obj = new Object();
+for (var n in obj) {
+  document.writeln(n, '<br>');
+}
+
+function MyObject() {
+  Attribute(this, 'Name', 'QoBean');
+
+  this.getName = function() {
+    return 'hello, ' + this.get()
+  }
+
+  // define object instance
+  this.Create = function() {
+    this.show = function(msg) {
+      alert(msg);
+    }
+  }
+}
+TMyObject = Class(TObject, 'MyObject')
+
+// the syntax is valid for a custom option...
+obj1 = TMyObject.Create();
+obj1.show(obj1.get('Name'));
+
+obj1.set('Name', 'Qomo')
+obj1.show(obj1.get('Name'));
+</script>

@@ -1,0 +1,27 @@
+﻿<script src="../Meta.js"></script>
+<script src="../Class.js"></script>
+<script src="../Namespace.js"></script>
+<script src="../Object.js"></script>
+
+<script>
+// a class, old
+function MyObject() {
+  this.msg = 'hi.';
+}
+uses('Qomo.b.c.c.system');
+Class(null, 'MyObject');
+
+// new class, new space
+MyObject = function() {
+  this.msg = 'hello.';
+}
+uses('Qomo.My.system');
+Class(null, 'MyObject');
+
+// test with intance objects
+obj = Qomo.b.c.c.system.TMyObject.Create();
+alert(obj.msg);
+
+obj = Qomo.My.system.TMyObject.Create();
+alert(obj.msg);
+</script>

@@ -1,0 +1,21 @@
+﻿<script src="../Meta.js"></script>
+<script src="../Class.js"></script>
+<script src="../Namespace.js"></script>
+<script src="../Object.js"></script>
+<script src="../TObject.js"></script>
+
+<script>
+function MyObject() {
+}
+TMyObject = Class(TObject, 'MyObject');
+
+obj = new MyObject();
+alert(TMyObject.SpaceName);
+
+spc = eval(TMyObject.SpaceName);
+alert(spc.TMyObject.ClassName);
+
+debugger;
+obj2 = Object({});
+alert(obj2);
+</script>

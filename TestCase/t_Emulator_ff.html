@@ -1,0 +1,47 @@
+﻿<script src="../Meta.js"></script>
+
+<script>
+function alert(msg) {
+  window.document.writeln(msg + '<br>')
+}
+
+function Emulator(func, init, ff) {
+  this.runtime = Unique(window);
+  init && init(this.runtime);
+  this.start = Scope(this.runtime, !ff ? func
+    : Weave.call(func, /^/, 'var window=obj; \n'));
+}
+
+/** if you want, ...
+  rt.window.document = {
+    write: function() {},
+    writeln: function() {}
+  }
+  rt.Math = ...
+*/
+var init_for_brower = function(rt) {
+  rt.window = rt;
+
+  // for safari
+  rt.alert = function(msg) {
+    window.alert(msg);
+  }
+}
+
+var some_code = function() {
+  alert('VM world:' + window.hello);
+  window.hello = 'hello, world!';
+  alert('VM world:' + hello);         // <-- default global object replaced
+  alert('VM world:' + window.hello);  // <-- window object replaced
+}
+
+// in real world
+alert('the world:' + window.hello);
+
+// in virtual world, is activity
+var vm1 = new Emulator(some_code, init_for_brower, true);
+vm1.start();
+
+// back real world, is quiet
+alert('the world: ' + window.hello);
+</script>

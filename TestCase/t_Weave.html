@@ -1,0 +1,14 @@
+﻿<script src="../Meta.js"></script>
+<script>
+// specify tags
+//    - /^/   : 开始
+//    - /$/   : 结尾
+
+var foo = new Function();
+foo = Weave.call(foo, /^/, 'alert("hello.");');
+foo = Weave.call(foo, /$/, 'alert("ok.");');
+foo = Weave.call(foo, 'alert("ok.");', 'alert("hi.");\n$&');
+foo = Weave.call(foo, 'hi.', '$&GOD!');
+foo();
+alert(foo.toString());
+</script>

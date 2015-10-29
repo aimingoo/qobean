@@ -1,0 +1,33 @@
+﻿<script src="../Meta.js"></script>
+
+<script>
+// Weave技术对闭包链有负面影响, 例如upvalue存取时不正常
+// （所以仅全局函数，或不使用upvalue的函数才能安全地使用该技术）
+var value = 'in global'
+foo = function() {
+  var value = 'in func';
+  return function() {
+    alert(value);
+  }
+}();
+foo();  // in func
+foo = Weave.call(foo, '^{', '// -- fixed\n');
+foo();  // in global
+
+// HOOK或AOP技术，对调用栈有负面影响，例如arguments.callee.caller存取不正常
+// （所以仅目标函数不访问caller时才能安全地使用该技术）
+function foo2() {
+  alert('called by: ' + Block(arguments.callee.caller, 'name'));
+}
+function foo3() {
+  foo2();
+}
+foo3();  // called by foo3
+// aop or hook
+foo2 = function(f) {
+  return function() {
+    f.apply(this, arguments);
+  }
+}(foo2);
+foo3();  // called by <anonymous>
+</script>

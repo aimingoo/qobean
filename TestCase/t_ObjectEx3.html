@@ -1,0 +1,39 @@
+<script src="../../trunk/Framework/RTL/JSEnhance.js"></script>
+<script src="../../trunk/Framework/RTL/JoPoints.js"></script>
+<script src="../Intfs/Interface.js"></script>
+
+<script src="../Meta.js"></script>
+<script src="../Class.js"></script>
+<script src="../Namespace.js"></script>
+<script src="../ObjectEx.js"></script>
+<script src="../Intfs/QomoIntfs.js"></script>
+<script src="../Intfs/ClassIntf.js"></script>
+<script src="../TObject.js"></script>
+
+<script src="../../trunk/Framework/RTL/Aspect.js"></script>
+
+<script>
+void function() {
+  // var asp = new FunctionAspect(Class, 'Class', 'Function')
+  var asp = new CustomAspect(Class, 'THtmlController_SubClass_Init', 'Initialized')
+  asp.OnIntroduction.add(function(cls, n, p, a) {
+    alert(cls.ClassName=='THtmlController');
+  });
+  asp.OnBefore.add(function(cls, n, p, a) {
+    alert(cls.ClassName=='THtmlController');
+  });
+}();
+
+function HtmlController() {
+}
+THtmlController = Class(TObject, 'HtmlController');
+
+function MyObject() {
+  Attribute(this, 'MyName', 'MyObject', 'rw');
+}
+TMyObject = Class(TObject, 'MyObject');
+
+var intf = Interface.QueryInterface(MyObject, IAttrProvider);
+alert(intf.hasAttribute('MyName'));
+alert(intf.hasAttribute('Name'));
+</script>

@@ -1,0 +1,27 @@
+﻿<script src="../Meta.js"></script>
+<script src="../Class.js"></script>
+<script src="../Namespace.js"></script>
+<script src="../Object.js"></script>
+<script src="../TObject.js"></script>
+
+<script>
+function MyObject() {
+  // define the class
+  // ...
+
+  // define object instance
+  this.Create = function() {
+    this.show = function() {
+      alert('hello, world!');
+    }
+  }
+}
+TMyObject = Class(TObject, 'MyObject')
+
+// the syntax is valid for a custom option...
+obj1 = TMyObject.Create();
+obj1.show();
+
+obj2 = new MyObject();
+obj2.show();
+</script>

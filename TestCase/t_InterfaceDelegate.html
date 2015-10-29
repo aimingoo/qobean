@@ -1,0 +1,60 @@
+<script src="../../trunk/Framework/RTL/JSEnhance.js"></script>
+<script src="../../trunk/Framework/RTL/JoPoints.js"></script>
+<script src="../Intfs/Interface.js"></script>
+
+<script src="../Meta.js"></script>
+<script src="../Class.js"></script>
+<script src="../Namespace.js"></script>
+<script src="../ObjectEx.js"></script>
+<script src="../Intfs/QomoIntfs.js"></script>
+<script src="../Intfs/ClassIntf.js"></script>
+<script src="../TObject.js"></script>
+
+<script>
+var o3 = { hasAttribute: function() { alert('o3.hasAttribute') } }
+var o4 = { hasOwnAttribute: function() { alert('o4.hasOwnAttribute') } }
+var o5 = {
+ get: function(n){
+  switch (n) {
+   case 'Name': return 'myName';
+   case 'Value': return 'myValue';
+   case 'Length': return 100;
+   default:
+    return 'unknow attribute';
+  };
+ }
+}
+
+function MyObject() {
+  Attribute(this, 'aObj', null);
+
+  var proxy = function(o) {
+    return o.get('aObj');
+  }
+
+  Delegate(_cls().Create, [
+    [o4, ['IObject']],  // <-- WARNING: will override at class initialized!
+    [proxy, ['IObject.hasAttribute']],
+    [proxy, ['IJoPoints']]
+  ]);
+
+/* NOTE:
+  the interfaces will re-delegate at class initialized:
+    for cls.Create, [IObject', 'IAttrProvider', 'IAttributes']
+    for cls,        ['IClass', 'IAttributes']
+*/
+}
+TMyObject = Class(TObject, 'MyObject'); // , IClass, IJoPoints
+
+var obj = new MyObject();
+var intf2 = QueryInterface(obj, IObject);
+obj.set('aObj', o3);
+intf2.hasAttribute();
+
+// NOTE: overrided, call proxy.hasOwnAttribute in ClassIntf.js!
+intf2.hasOwnAttribute();
+
+var intf3 = QueryInterface(obj, IJoPoints);
+obj.set('aObj', o5);
+alert(intf3.getLength());
+</script>

@@ -1,0 +1,45 @@
+<script src="../Meta.js"></script>
+
+<script>
+function alert(msg) {
+  window.document.writeln(msg + '<br>')
+}
+
+function Emulator(func, init, ff) {
+  this.runtime = Unique(window);
+  init && init(this.runtime);
+  this.start = Scope(this.runtime, !ff ? func
+    : Weave.call(func, /^/, 'var window=obj; \n'));
+}
+
+var init_for_brower = function(rt) {
+  rt.window = rt;
+
+  // for safari
+  rt.alert = function(msg) {
+    window.alert(msg);
+  }
+}
+
+var some_code = function() {
+  alert('VM world:' + window.hello);
+  window.hello = 'hello, world!';
+  alert('VM world:' + hello);         // <-- default global object replaced
+  alert('VM world:' + window.hello);  // <-- window object replaced
+}
+
+var vm = new Emulator(function(){
+  aNewVariant = '100';            // WARNNING: a undefined token point to engine global!
+  alert('aNewVariant' in window); // inhertied in ff, ie loss.
+/* changed in global, ff and ie
+  aNewVariant = 'where?';
+*/
+
+  alert(window.aNewVariant);     // show local, ff: 100,  inhreited, ie: undefined
+  window.aNewVariant = 'where?'; // changed in local
+  alert(window.aNewVariant);     // show local: where? but, overrided in ff, rewirted in ie.
+}, init_for_brower);
+vm.start();
+
+alert(aNewVariant); // show global: ff: 100, success,  ie:?
+</script>

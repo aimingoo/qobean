@@ -1,0 +1,46 @@
+﻿<script>
+function Weave(where, code) {
+  var _r_codebody = /[^{]*{([^}]*)}$/;
+  var src = this.toString().replace(_r_codebody, '$1');
+  var w = (where || '^}').substr(0,2).split('');
+
+  if (w[0] == '^') {
+    return (new Function(w[1]=='{' ? code+src :
+      w[1]=='}' ? src+code :
+      this))
+  }
+
+  if ('><#'.indexOf(w[0]) > -1) {
+    w[2] = where.substr(w[1] == '@' ? 2 : 1);
+    if (w[1] == '/' && w[2].charAt(w[2].length-1) == '/') {
+      w[2] = new RegExp(w[2].substr(1, w[2].length-2));
+    }
+  }
+  else {
+    w = ['#', '@', where];
+  }
+
+  var rx = w[2] instanceof RegExp;
+  var pos = src[rx ? 'search' : 'indexOf'](w[2]);
+  if (pos == -1) return this;
+
+  var len = rx ? w[2].lastIndex - pos : w[2].length;
+  if (code instanceof Function) code = code.toString().replace(_r_codebody, '$1');
+  if (w[0] == '#') {
+    code = [src.slice(0,pos), code, src.slice(pos+len)]
+  }
+  else {
+    if (w[0] == '<') pos+=len;
+    code = [src.slice(0,pos), code, src.slice(pos)]
+  }
+  return new Function(code.join(''));
+}
+
+var foo = new Function();
+foo = Weave.call(foo, '^{', 'alert("hello.");');
+foo = Weave.call(foo, '^}', 'alert("ok.");');
+foo = Weave.call(foo, '>alert("ok.");', 'alert("hi.");\n');
+foo = Weave.call(foo, '>/hi\\./', 'GOD!');
+foo();
+alert(foo.toString());
+</script>

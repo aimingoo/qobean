@@ -1,0 +1,30 @@
+﻿<script src="../Meta.js"></script>
+
+<script>
+foo = function x(a,b,c,d) {
+  hi;
+}
+alert('|' + Block(foo) + '|');
+alert('|' + Block(foo, 'param') + '|');
+alert('|' + Block(foo, 'name') + '|');
+alert('|' + Block(foo, 'scope') + '|');
+alert('|' + Block(foo, 'anonymous') + '|');
+
+var i = 0;
+void function() {
+  var i = 100;
+  var func = function() {
+    alert(i);
+  };
+
+  alert('-- compare scope with global(anonymous) -- ');
+
+  var m = eval(Block(func, 'scope'));
+  alert(m);
+  m();
+
+  var n = Block(func, 'anonymous');
+  alert(n);
+  n();
+}();
+</script>

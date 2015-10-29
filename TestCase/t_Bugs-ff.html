@@ -1,0 +1,23 @@
+<script src="../Meta.js"></script>
+<script>
+var hi = 'global';
+
+// one.
+function W() {
+}
+W.prototype = window;
+
+w = new W();
+alert(w == window);  // false
+alert(window == w);  // true
+
+// two.
+var t = window;
+function W() {
+}
+W.prototype = Unique(window)
+w = new W();
+w.hi = 'hi, obj';
+w.window = w;
+alert(t === w.window);  // show 'true', write invaild.
+</script>
